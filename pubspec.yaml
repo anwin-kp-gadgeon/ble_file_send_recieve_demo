@@ -1,0 +1,25 @@
+name: ble_file_send_recieve_poc
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  file_picker: ^10.3.10
+  flutter:
+    sdk: flutter
+  flutter_blue_plus: ^2.1.0
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.1
+  provider: ^6.1.5+1
+  shared_preferences: ^2.5.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
