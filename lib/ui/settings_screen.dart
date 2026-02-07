@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
+import '../utils/log_service.dart';
 import '../viewmodels/settings_view_model.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -280,6 +281,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       hint: AppStrings.logCharHint,
                       icon: Icons.terminal,
                       theme: theme,
+                    ),
+
+                    const SizedBox(height: 32),
+                    Text(
+                      'Crash Logs',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              await LogService().shareLogs();
+                            },
+                            icon: const Icon(Icons.share_rounded),
+                            label: const Text('Share Logs'),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              await LogService().clearLogs();
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Crash logs cleared'),
+                                  ),
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.delete_sweep_rounded),
+                            label: const Text('Clear Logs'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.error,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

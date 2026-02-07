@@ -256,12 +256,16 @@ class DeviceViewModel extends ChangeNotifier {
             _settings?.logOutputCharUuid ?? BleConstants.logOutputCharUuid;
 
         for (var c in service.characteristics) {
-          if (c.uuid.toString().toUpperCase() ==
-              targetFirmwareCharUuid.toUpperCase()) {
+          // Use robust UUID comparison (handles case & 16-bit vs 128-bit)
+          if (BleUtils.areUuidsEqual(
+            c.uuid.toString(),
+            targetFirmwareCharUuid,
+          )) {
+            debugPrint("Found Firmware Char: ${c.uuid}");
             _firmwareInputChar = c;
           }
-          if (c.uuid.toString().toUpperCase() ==
-              targetLogCharUuid.toUpperCase()) {
+          if (BleUtils.areUuidsEqual(c.uuid.toString(), targetLogCharUuid)) {
+            debugPrint("Found Log Char: ${c.uuid}");
             _logOutputChar = c;
           }
         }

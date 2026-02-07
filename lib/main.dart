@@ -1,15 +1,33 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_strings.dart';
+import 'utils/log_service.dart';
 import 'viewmodels/settings_view_model.dart';
 import 'viewmodels/scan_view_model.dart';
 import 'viewmodels/device_view_model.dart';
 import 'ui/landing_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize LogService
+  await LogService().init();
+
+  // Capture Flutter framework errors
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    LogService().logError(details.exception, details.stack);
+  };
+
+  // Capture asynchronous errors that aren't handled by the Flutter framework
+  PlatformDispatcher.instance.onError = (error, stack) {
+    LogService().logError(error, stack);
+    return true;
+  };
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
